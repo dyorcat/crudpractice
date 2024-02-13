@@ -1,7 +1,6 @@
 package com.example.crudpractice.domain.user.service
 
-import com.example.crudpractice.domain.exception.dto.InvalidCredentialException
-import com.example.crudpractice.domain.exception.dto.UniqueAttributeValueAlreadyExistException
+import com.example.crudpractice.domain.exception.ModelNotFoundException
 import com.example.crudpractice.domain.user.dto.UserLoginRequest
 import com.example.crudpractice.domain.user.dto.UserResponse
 import com.example.crudpractice.domain.user.dto.UserSignUpRequest
@@ -19,12 +18,11 @@ class UserServiceImpl(
 ): UserService {
     override fun signUp(userSignUpRequest: UserSignUpRequest): UserResponse {
         if(userRepository.existsByNickname(userSignUpRequest.nickname))
-            throw UniqueAttributeValueAlreadyExistException("nickname", userSignUpRequest.nickname)
-        if(userSignUpRequest.passwordConfirm != userSignUpRequest.password) throw InvalidCredentialException()
+            throw Exception("중복된 닉네임입니다.")
+        if(userSignUpRequest.passwordConfirm != userSignUpRequest.password) throw Exception("비밀번호가 일치하지 않습니다. ")
         val user = User(
             nickname = userSignUpRequest.nickname,
             password = passwordEncoder.encode(userSignUpRequest.password),
-            passwordConfirm = passwordEncoder.encode(userSignUpRequest.passwordConfirm)
         )
 
         val createdUser = userRepository.save(user)

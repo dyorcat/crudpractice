@@ -11,9 +11,6 @@ class User (
 
     @Column(name = "password", nullable = false)
     var password: String,
-
-    @Column(name = "passwordconfirm", nullable = false)
-    var passwordConfirm: String,
 ) {
 
     @Id
